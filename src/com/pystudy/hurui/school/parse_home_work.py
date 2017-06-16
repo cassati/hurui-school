@@ -29,7 +29,23 @@ def readFile(file_name):
         if label_finded[0].find(msg) < 0:
             label_replace = '<label for="'+id+'">' + label_finded[0] + msg + '</label>'
             origin_data = re.sub(pattern_label, label_replace, origin_data)
-        
+    
+    # 删除个人信息
+    pattern_user = r'<span\sid="ContentPlaceHolder1_lbCourse".*?</span>'
+    origin_data = re.sub(pattern_user, '', origin_data)
+    
+    # 删除logo
+    pattern_header = r'<div\sid="logo".*?</div>'
+    origin_data = re.sub(pattern_header, '', origin_data)
+    
+    # 删除欢迎信息
+    pattern_welcome = r'<div\sid="liveclock".*?</div>'
+    origin_data = re.sub(pattern_welcome, '', origin_data)
+    
+    # 删除查看作业
+    pattern_homework = r'<div><span\sid="lbNavigate".*?</span></div>'
+    origin_data = re.sub(pattern_homework, '', origin_data)
+    
     f = open(file_name, 'w', encoding='utf-8')
     f.write(origin_data)
     f.flush()
