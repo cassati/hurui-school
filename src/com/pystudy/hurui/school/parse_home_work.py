@@ -7,13 +7,15 @@ Created on 2017年6月16日
 import re
 
 def readFile(file_name):
+    
+    # 一次性读入文件所有内容
     with open(file_name, encoding='utf-8') as f:
         origin_data = f.read()
     
+    # 获取所有选中的CheckBox
+    pattern_id = re.compile(r'<input\sid="(.*)"\stype.*')
     pattern_input = re.compile(r'<input.*?\s/>')
     inputs = re.findall(pattern_input, origin_data)
-    
-    pattern_id = re.compile(r'<input\sid="(.*)"\stype.*')
     ids = []
     for tmp in inputs:
         if tmp.find('checked="checked"') >= 0:
@@ -21,6 +23,7 @@ def readFile(file_name):
             if match:
                 ids.append(match.group(1))
 
+    # 在选中的答案后面追加自定义字符串
     msg = '--yes'
     for id in ids:
         label = r'<label\sfor="'+id+'">' + '(.*?)' + '</label>'
@@ -46,6 +49,7 @@ def readFile(file_name):
     pattern_homework = r'<div><span\sid="lbNavigate".*?</span></div>'
     origin_data = re.sub(pattern_homework, '', origin_data)
     
+    # 保存文件内容
     f = open(file_name, 'w', encoding='utf-8')
     f.write(origin_data)
     f.flush()
